@@ -1,0 +1,1160 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI-Пульс — Rezolve Ai</title>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;700;800&family=Inter+Tight:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --blue:   #478BC9;
+  --bg:     #080f1f;
+  --card:   rgba(255,255,255,0.05);
+  --card2:  rgba(255,255,255,0.08);
+  --border: rgba(255,255,255,0.1);
+  --text:   rgba(255,255,255,0.9);
+  --sub:    rgba(255,255,255,0.6);
+  --muted:  rgba(255,255,255,0.35);
+  --shadow: rgba(0,0,0,.4) 0px 2px 12px;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{font-family:'Inter Tight',-apple-system,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;}
+
+/* ── HEADER ─────────────────────────── */
+.hdr{
+  background:rgba(8,15,31,0.9);backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--border);
+  padding:14px 32px;display:flex;align-items:center;gap:14px;
+  position:sticky;top:0;z-index:200;
+}
+/* invert logo to white on dark */
+.hdr-logo{height:26px;filter:brightness(0) invert(1);}
+.hdr-sep{width:1px;height:20px;background:var(--border);}
+.hdr-name{font-size:12px;font-weight:600;color:var(--muted);}
+
+/* ── DINO BAR ───────────────────────── */
+.dino-bar{
+  background:rgba(8,15,31,0.9);backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--border);
+  padding:6px 40px 0;position:sticky;top:55px;z-index:199;
+}
+.runway{position:relative;height:50px;}
+.ground{position:absolute;bottom:8px;left:0;right:0;height:2px;background:var(--border);}
+.sec-labels{position:absolute;bottom:0;left:0;right:0;display:flex;justify-content:space-between;padding:0 1%;}
+.sec-lbl{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:rgba(255,255,255,.15);transition:color .3s;}
+.sec-lbl.done{color:var(--sub);}
+.sec-lbl.active{color:var(--blue);}
+.cactus-w{position:absolute;bottom:8px;transform:translateX(-50%);opacity:.25;transition:opacity .4s;}
+.cactus-w.passed{opacity:.1;}
+.dino-w{position:absolute;bottom:8px;transition:left .7s cubic-bezier(.34,1.4,.64,1);}
+.dino-w.jump{animation:djump .5s ease-out;}
+@keyframes djump{0%{transform:translateY(0);}42%{transform:translateY(-30px);}100%{transform:translateY(0);}}
+.leg-a,.leg-b{transition:opacity .05s;}
+.dino-w.ra .leg-b{opacity:0;}
+.dino-w.rb .leg-a{opacity:0;}
+
+/* ── MAIN ───────────────────────────── */
+.wrap{max-width:680px;margin:0 auto;padding:52px 24px 80px;}
+.section-block{margin-bottom:64px;}
+.section-block:last-child{margin-bottom:0;}
+.sec-head{display:flex;align-items:center;gap:10px;margin-bottom:6px;}
+.sec-icon{color:var(--blue);flex-shrink:0;}
+.sec-tag{font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--blue);}
+.sec-title{font-family:'Manrope',sans-serif;font-size:26px;font-weight:800;letter-spacing:-.4px;margin-bottom:8px;line-height:1.2;color:var(--text);}
+.sec-sub{font-size:14px;color:var(--sub);line-height:1.6;margin-bottom:28px;max-width:580px;}
+
+/* cards */
+.card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:22px;margin-bottom:14px;}
+.qlbl{font-size:13px;font-weight:600;color:var(--text);margin-bottom:6px;}
+.qsub{font-size:12px;color:var(--muted);line-height:1.5;margin-bottom:10px;}
+.divider{height:1px;background:var(--border);margin:18px 0;}
+
+/* ── INTRO ──────────────────────────── */
+.intro{text-align:center;padding:8px 0 52px;}
+.intro-badge{font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--blue);display:block;margin-bottom:20px;}
+.intro-h{font-family:'Manrope',sans-serif;font-size:44px;font-weight:800;letter-spacing:-1px;line-height:1.1;margin-bottom:14px;color:var(--text);}
+.intro-h .grad{background:linear-gradient(90deg,#4A7FC1 0%,#00C8E8 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.intro-sub{font-size:15px;color:var(--sub);line-height:1.6;max-width:460px;margin:0 auto 24px;}
+.agent-note{display:inline-block;background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:8px;padding:9px 16px;font-size:13px;color:var(--muted);font-style:italic;margin-bottom:32px;}
+.intro-para{font-size:14px;color:var(--sub);line-height:1.7;max-width:460px;margin:0 auto;text-align:left;}
+.trust-list{text-align:left;max-width:460px;margin:0 auto;display:flex;flex-direction:column;gap:12px;}
+.trust-item{display:flex;align-items:flex-start;gap:12px;font-size:14px;color:var(--sub);line-height:1.55;}
+.trust-icon{color:var(--blue);flex-shrink:0;margin-top:1px;}
+
+/* ── TOOL MATRIX ────────────────────── */
+.tool-row{border-bottom:1px solid var(--border);padding:14px 0;}
+.tool-row:last-child{border-bottom:none;}
+.tool-top{display:flex;align-items:flex-start;gap:16px;}
+.tool-nm{font-size:14px;font-weight:600;color:var(--text);min-width:160px;padding-top:2px;}
+.radio-group{display:flex;flex-wrap:wrap;gap:6px;}
+.ropt{
+  font-size:12px;font-weight:500;padding:5px 12px;border-radius:20px;
+  border:1.5px solid var(--border);background:transparent;color:var(--muted);
+  cursor:pointer;transition:all .14s;white-space:nowrap;
+}
+.ropt:hover{border-color:var(--blue);color:var(--blue);}
+.ropt.on{background:rgba(71,139,201,.25);border-color:var(--blue);color:#fff;}
+.ropt.on.r-dropped{background:rgba(220,38,38,.25);border-color:#dc2626;color:#fca5a5;}
+.ropt.on.r-try{background:rgba(71,139,201,.2);border-color:var(--blue);color:var(--blue);}
+
+/* tool sub-form */
+.tool-sub{
+  display:none;margin-top:10px;margin-left:176px;
+  background:rgba(255,255,255,.04);border-radius:8px;padding:14px 16px;
+  border:1px solid var(--border);animation:fadein .2s ease;
+}
+.tool-sub.open{display:block;}
+.sub-q{font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--blue);margin-bottom:7px;margin-top:12px;}
+.sub-q:first-child{margin-top:0;}
+.mini-radio{display:flex;flex-wrap:wrap;gap:5px;}
+.mr{
+  font-size:11px;font-weight:500;padding:4px 10px;border-radius:16px;
+  border:1.5px solid var(--border);background:transparent;color:var(--muted);
+  cursor:pointer;transition:all .14s;
+}
+.mr:hover{border-color:var(--blue);color:var(--blue);}
+.mr.on{background:rgba(71,139,201,.2);border-color:var(--blue);color:#fff;}
+.mini-cb{display:flex;flex-wrap:wrap;gap:5px;}
+.mc{
+  font-size:11px;font-weight:500;padding:4px 10px;border-radius:16px;
+  border:1.5px solid var(--border);background:transparent;color:var(--muted);
+  cursor:pointer;transition:all .14s;
+}
+.mc:hover{border-color:var(--blue);color:var(--blue);}
+.mc.on{background:rgba(71,139,201,.25);border-color:var(--blue);color:#fff;}
+.dropped-field{display:none;margin-top:10px;margin-left:176px;}
+.dropped-field.open{display:block;}
+
+/* ── CHECKBOXES ─────────────────────── */
+.cbgrid{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:10px;}
+.cbgrid.single{grid-template-columns:1fr;}
+.cbi{
+  display:flex;align-items:flex-start;gap:10px;padding:11px 12px;
+  border:1.5px solid var(--border);border-radius:8px;cursor:pointer;transition:all .14s;
+}
+.cbi:hover{border-color:var(--blue);}
+.cbi.on{border-color:var(--blue);background:rgba(71,139,201,.1);}
+.cbbox{width:15px;height:15px;border:2px solid var(--border);border-radius:4px;flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;transition:all .14s;}
+.cbi.on .cbbox{background:var(--blue);border-color:var(--blue);}
+.cbi.on .cbbox::after{content:'✓';font-size:9px;color:#fff;font-weight:700;}
+.cb-text{font-size:13px;font-weight:500;color:var(--sub);line-height:1.4;}
+.phase-lbl{font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--blue);margin:16px 0 7px;display:flex;align-items:center;gap:6px;}
+.phase-lbl:first-child{margin-top:0;}
+
+/* ── SCALE ──────────────────────────── */
+.scale{display:flex;gap:6px;margin:10px 0;}
+.sopt{
+  flex:1;padding:10px 4px;text-align:center;
+  border:1.5px solid var(--border);border-radius:8px;
+  cursor:pointer;transition:all .14s;font-size:11px;font-weight:600;color:var(--muted);line-height:1.35;
+}
+.sopt:hover{border-color:var(--blue);color:var(--blue);}
+.sopt.on{background:rgba(71,139,201,.25);border-color:var(--blue);color:#fff;}
+
+/* ── TOGGLES ────────────────────────── */
+.toggles{display:flex;gap:7px;margin:10px 0;}
+.tbtn{
+  padding:9px 20px;border:1.5px solid var(--border);border-radius:24px;
+  font-size:13px;font-weight:600;cursor:pointer;transition:all .14s;
+  color:var(--muted);background:transparent;
+}
+.tbtn:hover{border-color:var(--blue);color:var(--blue);}
+.tbtn.on{background:rgba(71,139,201,.2);border-color:var(--blue);color:#fff;}
+
+/* ── INPUTS ─────────────────────────── */
+textarea,input[type=text]{
+  width:100%;border:1.5px solid var(--border);border-radius:8px;
+  padding:12px 14px;font-family:'Inter Tight',sans-serif;font-size:14px;
+  color:var(--text);background:rgba(255,255,255,.06);resize:vertical;transition:border-color .14s;outline:none;
+}
+textarea:focus,input[type=text]:focus{border-color:var(--blue);}
+textarea::placeholder,input::placeholder{color:var(--muted);}
+.input-row{display:flex;gap:8px;margin-top:8px;align-items:center;}
+.btn-mic{
+  display:flex;align-items:center;gap:5px;padding:8px 14px;
+  border:1.5px solid var(--border);border-radius:20px;
+  font-size:12px;font-weight:600;color:var(--muted);background:transparent;
+  cursor:pointer;transition:all .14s;white-space:nowrap;
+}
+.btn-mic:hover{border-color:var(--blue);color:var(--blue);}
+.btn-mic.rec{border-color:#dc2626;color:#dc2626;animation:pulse 1.2s infinite;}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:.5;}}
+.dropzone{
+  border:2px dashed var(--border);border-radius:8px;padding:16px;
+  text-align:center;cursor:pointer;transition:all .14s;margin-top:8px;
+}
+.dropzone:hover,.dropzone.over{border-color:var(--blue);background:rgba(71,139,201,.07);}
+.dropzone p{font-size:12px;color:var(--muted);}
+.dropzone p strong{color:var(--blue);}
+
+/* snapshot note */
+.snap-note{
+  background:rgba(71,139,201,.08);border:1px solid rgba(71,139,201,.2);
+  border-radius:8px;padding:12px 14px;font-size:13px;color:var(--sub);line-height:1.5;margin-top:12px;
+}
+.snap-note code{background:rgba(71,139,201,.15);padding:1px 5px;border-radius:4px;font-family:monospace;font-size:12px;color:#7ec8f5;}
+
+/* expand */
+.expand-toggle{
+  display:inline-flex;align-items:center;gap:6px;font-size:13px;
+  color:var(--blue);cursor:pointer;font-weight:600;user-select:none;margin-top:12px;
+}
+.expand-toggle .arr{transition:transform .2s;display:inline-block;}
+.expand-toggle.open .arr{transform:rotate(90deg);}
+.expand-body{display:none;margin-top:10px;}
+.expand-body.open{display:block;}
+
+/* add tool row */
+.add-row{display:flex;gap:8px;margin-top:12px;}
+.add-row input{flex:1;}
+.btn-add{
+  padding:0 16px;border:1.5px solid var(--border);border-radius:8px;
+  font-size:13px;font-weight:600;color:var(--blue);background:transparent;
+  cursor:pointer;white-space:nowrap;transition:all .14s;
+}
+.btn-add:hover{border-color:var(--blue);}
+
+/* ── SUMMARY ────────────────────────── */
+.summary-card{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:16px;padding:32px 28px;margin-top:14px;
+}
+.summary-greeting{
+  font-family:'Manrope',sans-serif;font-size:22px;font-weight:800;
+  color:var(--text);margin-bottom:28px;line-height:1.2;
+}
+.summary-section{margin-bottom:18px;}
+.summary-section:last-child{margin-bottom:0;}
+.summary-key{
+  font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;
+  color:var(--muted);margin-bottom:5px;
+}
+.summary-val{font-size:14px;color:var(--sub);line-height:1.6;}
+.summary-divider{height:1px;background:var(--border);margin:22px 0;}
+
+/* ── FINAL / META ───────────────────── */
+.final-block{background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:12px;padding:28px;margin-bottom:14px;}
+.meta-lbl{font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--blue);margin-bottom:14px;}
+.meta-h{font-family:'Manrope',sans-serif;font-size:24px;font-weight:800;color:var(--text);letter-spacing:-.3px;line-height:1.2;margin-bottom:10px;}
+.meta-sub{font-size:14px;color:var(--sub);line-height:1.6;margin-bottom:18px;}
+.who-sec{margin-top:22px;padding-top:22px;border-top:1px solid var(--border);}
+.who-lbl{font-size:13px;font-weight:600;color:var(--sub);margin-bottom:10px;}
+.who-opts{display:flex;flex-direction:column;gap:7px;}
+.wopt{
+  display:flex;align-items:center;gap:11px;padding:11px 14px;
+  border:1px solid var(--border);border-radius:8px;cursor:pointer;transition:all .14s;
+}
+.wopt:hover{border-color:var(--blue);}
+.wopt.on{border-color:var(--blue);background:rgba(71,139,201,.12);}
+.wradio{width:15px;height:15px;border:2px solid var(--border);border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;}
+.wopt.on .wradio{border-color:var(--blue);}
+.wopt.on .wradio::after{content:'';width:7px;height:7px;background:var(--blue);border-radius:50%;}
+.wtxt{font-size:13px;color:var(--sub);}
+
+/* name + submit */
+.name-card{background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:12px;padding:22px;margin-bottom:14px;}
+.name-lbl{font-size:13px;font-weight:600;color:var(--text);margin-bottom:7px;}
+.btn-submit{
+  background:var(--blue);color:#fff;border:none;border-radius:58px;
+  padding:14px 36px;font-family:'Inter Tight',sans-serif;font-size:14px;font-weight:600;
+  cursor:pointer;box-shadow:var(--shadow);transition:opacity .14s;
+}
+.btn-submit:hover{opacity:.85;}
+
+@keyframes fadein{from{opacity:0;transform:translateY(5px);}to{opacity:1;transform:none;}}
+
+/* ── TRY SUB ────────────────────────── */
+.try-sub{
+  display:none;margin-top:10px;margin-left:176px;
+  background:rgba(71,139,201,.06);border-radius:8px;padding:14px 16px;
+  border:1px solid rgba(71,139,201,.15);animation:fadein .2s ease;
+}
+.try-sub.open{display:block;}
+
+/* ── COLLEAGUE SECTION ──────────────── */
+.colleague-section{display:none;margin-top:16px;padding-top:16px;border-top:1px solid var(--border);}
+.colleague-section.open{display:block;}
+.colleague-lbl{
+  font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;
+  color:var(--blue);margin-bottom:10px;display:flex;align-items:center;gap:6px;
+}
+
+/* ── MIRROR CARD ────────────────────── */
+.mirror-rows{display:flex;flex-direction:column;gap:9px;}
+.mirror-row{display:flex;align-items:baseline;gap:12px;}
+.mirror-key{font-size:10px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;color:var(--muted);min-width:108px;flex-shrink:0;}
+.mirror-val{font-size:13px;color:var(--sub);line-height:1.5;}
+
+/* ── VALIDATION MODAL ───────────────── */
+.vmodal-overlay{
+  position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:500;
+  display:flex;align-items:center;justify-content:center;
+  opacity:0;pointer-events:none;transition:opacity .2s;
+}
+.vmodal-overlay.open{opacity:1;pointer-events:all;}
+.vmodal{
+  background:#0e1b35;border:1px solid var(--border);border-radius:16px;
+  padding:32px 28px;max-width:440px;width:90%;animation:fadein .2s ease;
+}
+.vmodal-title{font-family:'Manrope',sans-serif;font-size:18px;font-weight:800;color:var(--text);margin-bottom:8px;}
+.vmodal-sub{font-size:14px;color:var(--sub);line-height:1.6;margin-bottom:16px;}
+.vmodal-list{list-style:none;margin-bottom:24px;display:flex;flex-direction:column;gap:6px;}
+.vmodal-list li{font-size:13px;color:var(--muted);padding-left:16px;position:relative;}
+.vmodal-list li::before{content:'—';position:absolute;left:0;color:var(--blue);}
+.vmodal-btns{display:flex;gap:10px;justify-content:flex-end;}
+.vmodal-back{
+  padding:10px 20px;border:1.5px solid var(--border);border-radius:24px;
+  font-size:13px;font-weight:600;color:var(--sub);background:transparent;cursor:pointer;transition:all .14s;
+}
+.vmodal-back:hover{border-color:var(--blue);color:var(--blue);}
+.vmodal-force{
+  padding:10px 20px;border:none;border-radius:24px;
+  font-size:13px;font-weight:600;color:rgba(255,255,255,.55);background:rgba(255,255,255,.07);cursor:pointer;transition:all .14s;
+}
+.vmodal-force:hover{background:rgba(255,255,255,.12);color:var(--text);}
+</style>
+</head>
+<body>
+
+<!-- ── HEADER ──────────────────────────────── -->
+<header class="hdr">
+  <img class="hdr-logo" src="https://rezolve.com/wp-content/uploads/2025/07/rezolve-logo-12-2025.svg" alt="Rezolve Ai"
+    onerror="this.style.display='none';document.getElementById('hdr-fallback').style.display='inline'">
+  <span id="hdr-fallback" style="display:none;font-family:'Manrope',sans-serif;font-weight:800;font-size:18px;color:var(--text)">Rezolve Ai</span>
+  <div class="hdr-sep"></div>
+  <span class="hdr-name">AI-Пульс</span>
+</header>
+
+<!-- ── DINO PROGRESS BAR ────────────────────── -->
+<div class="dino-bar">
+  <div class="runway">
+    <div class="ground"></div>
+
+    <!-- Cactus markers — between each of 6 sections -->
+    <div class="cactus-w" id="ca0" style="left:23%">
+      <svg width="13" height="20" viewBox="0 0 13 20"><rect x="5" y="0" width="3" height="16" rx="1" fill="rgba(255,255,255,0.25)"/><rect x="0" y="5" width="6" height="2" rx="1" fill="rgba(255,255,255,0.25)"/><rect x="0" y="3" width="2" height="4" rx="1" fill="rgba(255,255,255,0.25)"/><rect x="7" y="7" width="6" height="2" rx="1" fill="rgba(255,255,255,0.25)"/><rect x="11" y="5" width="2" height="4" rx="1" fill="rgba(255,255,255,0.25)"/></svg>
+    </div>
+    <div class="cactus-w" id="ca1" style="left:38%">
+      <svg width="11" height="18" viewBox="0 0 11 18"><rect x="4" y="0" width="3" height="14" rx="1" fill="rgba(255,255,255,0.25)"/><rect x="0" y="4" width="5" height="2" rx="1" fill="rgba(255,255,255,0.25)"/><rect x="0" y="2" width="2" height="4" rx="1" fill="rgba(255,255,255,0.25)"/><rect x="6" y="6" width="5" height="2" rx="1" fill="rgba(255,255,255,0.25)"/><rect x="9" y="4" width="2" height="4" rx="1" fill="rgba(255,255,255,0.25)"/></svg>
+    </div>
+    <div class="cactus-w" id="ca2" style="left:53%">
+      <svg width="13" height="20" viewBox="0 0 13 20"><rect x="5" y="0" width="3" height="16" rx="1" fill="rgba(255,255,255,0.25)"/><rect x="0" y="5" width="6" height="2" rx="1" fill="rgba(255,255,255,0.25)"/><rect x="0" y="3" width="2" height="4" rx="1" fill="rgba(255,255,255,0.25)"/><rect x="7" y="7" width="6" height="2" rx="1" fill="rgba(255,255,255,0.25)"/><rect x="11" y="5" width="2" height="4" rx="1" fill="rgba(255,255,255,0.25)"/></svg>
+    </div>
+    <div class="cactus-w" id="ca3" style="left:68%">
+      <svg width="11" height="18" viewBox="0 0 11 18"><rect x="4" y="0" width="3" height="14" rx="1" fill="rgba(255,255,255,0.25)"/><rect x="0" y="4" width="5" height="2" rx="1" fill="rgba(255,255,255,0.25)"/><rect x="0" y="2" width="2" height="4" rx="1" fill="rgba(255,255,255,0.25)"/><rect x="6" y="6" width="5" height="2" rx="1" fill="rgba(255,255,255,0.25)"/><rect x="9" y="4" width="2" height="4" rx="1" fill="rgba(255,255,255,0.25)"/></svg>
+    </div>
+    <div class="cactus-w" id="ca4" style="left:83%">
+      <svg width="13" height="20" viewBox="0 0 13 20"><rect x="5" y="0" width="3" height="16" rx="1" fill="rgba(255,255,255,0.25)"/><rect x="0" y="5" width="6" height="2" rx="1" fill="rgba(255,255,255,0.25)"/><rect x="0" y="3" width="2" height="4" rx="1" fill="rgba(255,255,255,0.25)"/><rect x="7" y="7" width="6" height="2" rx="1" fill="rgba(255,255,255,0.25)"/><rect x="11" y="5" width="2" height="4" rx="1" fill="rgba(255,255,255,0.25)"/></svg>
+    </div>
+
+    <!-- Dino -->
+    <div class="dino-w ra" id="dino" style="left:3%">
+      <svg width="36" height="40" viewBox="0 0 36 40" xmlns="http://www.w3.org/2000/svg">
+        <rect x="16" y="2" width="16" height="10" rx="2" fill="rgba(255,255,255,0.85)"/>
+        <rect x="28" y="10" width="8" height="4" rx="2" fill="rgba(255,255,255,0.85)"/>
+        <rect x="30" y="5" width="3" height="3" rx="1" fill="#080f1f"/>
+        <rect x="13" y="10" width="9" height="5" fill="rgba(255,255,255,0.85)"/>
+        <rect x="5" y="14" width="20" height="12" rx="2" fill="rgba(255,255,255,0.85)"/>
+        <rect x="0" y="18" width="8" height="5" rx="2" fill="rgba(255,255,255,0.85)"/>
+        <rect x="0" y="21" width="5" height="3" rx="1" fill="rgba(255,255,255,0.85)"/>
+        <rect x="22" y="18" width="4" height="5" rx="1" fill="rgba(255,255,255,0.85)"/>
+        <g class="leg-a">
+          <rect x="11" y="25" width="5" height="11" rx="2" fill="rgba(255,255,255,0.85)"/>
+          <rect x="18" y="27" width="5" height="8" rx="2" fill="rgba(255,255,255,0.85)"/>
+        </g>
+        <g class="leg-b">
+          <rect x="11" y="27" width="5" height="8" rx="2" fill="rgba(255,255,255,0.85)"/>
+          <rect x="18" y="25" width="5" height="11" rx="2" fill="rgba(255,255,255,0.85)"/>
+        </g>
+      </svg>
+    </div>
+
+    <!-- Section labels -->
+    <div class="sec-labels">
+      <span class="sec-lbl" id="sl0">Инструменты</span>
+      <span class="sec-lbl" id="sl1">Задачи</span>
+      <span class="sec-lbl" id="sl2">Глубина</span>
+      <span class="sec-lbl" id="sl3">Кейсы</span>
+      <span class="sec-lbl" id="sl4">Барьеры</span>
+      <span class="sec-lbl" id="sl5">Финал</span>
+    </div>
+  </div>
+</div>
+
+<!-- ══ MAIN CONTENT ═════════════════════════════ -->
+<div class="wrap">
+
+<!-- ── INTRO ────────────────────────────────── -->
+<div class="intro section-block" id="sec-intro">
+  <span class="intro-badge">Rezolve AI · AI-Пульс</span>
+  <h1 class="intro-h">Как мы используем<br><span class="grad">AI в работе?</span></h1>
+  <p class="intro-sub">Время заполнения — примерно 15 минут.</p>
+  <p class="intro-para">Мы знаем, что ещё одна форма — это время. Но ответы здесь пойдут в дело: мы хотим понять, где реально нужна подписка, где инструмент можно заменить на что-то лучше, где кому-то не хватает помощи с конкретной задачей. Ещё — хотим собрать то, что уже работает у вас лично, чтобы поделиться с остальными командами. Пожалуйста, пишите «сырее», а не красивее.</p>
+  <p class="intro-para" style="margin-top:10px;color:var(--muted);font-style:italic;">* Ну, или попросите своего агента заполнить эту форму. Только «сырее», а не красивее.</p>
+</div>
+
+<!-- ── SECTION 1: TOOLS ─────────────────────── -->
+<div class="section-block" id="sec-tools">
+  <div class="sec-head">
+    <!-- pixel grid icon -->
+    <svg class="sec-icon" width="20" height="20" viewBox="0 0 20 20">
+      <rect x="0" y="0" width="6" height="6" rx="1" fill="currentColor"/>
+      <rect x="8" y="0" width="6" height="6" rx="1" fill="currentColor"/>
+      <rect x="16" y="0" width="4" height="6" rx="1" fill="currentColor"/>
+      <rect x="0" y="8" width="6" height="6" rx="1" fill="currentColor"/>
+      <rect x="8" y="8" width="6" height="6" rx="1" fill="currentColor"/>
+      <rect x="16" y="8" width="4" height="6" rx="1" fill="currentColor"/>
+      <rect x="0" y="16" width="6" height="4" rx="1" fill="currentColor"/>
+      <rect x="8" y="16" width="6" height="4" rx="1" fill="currentColor"/>
+      <rect x="16" y="16" width="4" height="4" rx="1" fill="currentColor"/>
+    </svg>
+    <span class="sec-tag">Раздел 1</span>
+  </div>
+  <h2 class="sec-title">Инструменты</h2>
+  <p class="sec-sub">Дженерик-модели и специализированные инструменты — всё в одном списке. Отметь статус для каждого, который знаешь.</p>
+
+  <div class="card">
+    <div id="tools-list"></div>
+    <div class="colleague-section" id="colleague-section">
+      <div class="colleague-lbl">
+        <svg width="12" height="12" viewBox="0 0 12 12"><rect x="0" y="0" width="5" height="5" rx="1" fill="currentColor"/><rect x="7" y="0" width="5" height="5" rx="1" fill="currentColor"/><rect x="0" y="7" width="5" height="5" rx="1" fill="currentColor"/><rect x="7" y="7" width="5" height="5" rx="1" fill="currentColor"/></svg>
+        Добавлено коллегами
+      </div>
+      <div id="colleague-list"></div>
+    </div>
+
+    <div class="add-row" style="margin-top:16px">
+      <input type="text" id="tool-other-inp" placeholder="Добавить инструмент, которого нет в списке…">
+      <button class="btn-add" onclick="addTool()">+ Добавить</button>
+    </div>
+  </div>
+
+  <div class="snap-note">
+    <strong>Приложи usage snapshot:</strong> если основной инструмент — Claude, запусти <code>/insights</code> и прикрепи файл. Для других (Copilot, Codex, Gemini, Cursor…) — скриншот дашборда из настроек аккаунта.
+    <div class="dropzone" onclick="this.querySelector('input').click()" style="margin-top:10px">
+      <input type="file" style="display:none" id="snapshot-file" accept="image/*,.pdf">
+      <p>Перетащи файл или <strong>нажми для выбора</strong></p>
+    </div>
+  </div>
+</div>
+
+<!-- ── SECTION 2: TASKS ─────────────────────── -->
+<div class="section-block" id="sec-tasks">
+  <div class="sec-head">
+    <!-- pixel checklist icon -->
+    <svg class="sec-icon" width="20" height="20" viewBox="0 0 20 20">
+      <rect x="0" y="1" width="4" height="4" rx="1" fill="currentColor"/>
+      <rect x="6" y="2" width="14" height="2" rx="1" fill="currentColor"/>
+      <rect x="0" y="8" width="4" height="4" rx="1" fill="currentColor"/>
+      <rect x="6" y="9" width="14" height="2" rx="1" fill="currentColor"/>
+      <rect x="0" y="15" width="4" height="4" rx="1" fill="currentColor"/>
+      <rect x="6" y="16" width="14" height="2" rx="1" fill="currentColor"/>
+      <!-- checkmarks -->
+      <rect x="1" y="2" width="2" height="1" fill="white"/>
+      <rect x="2" y="3" width="1" height="1" fill="white"/>
+      <rect x="1" y="9" width="2" height="1" fill="white"/>
+      <rect x="2" y="10" width="1" height="1" fill="white"/>
+    </svg>
+    <span class="sec-tag">Раздел 2</span>
+  </div>
+  <h2 class="sec-title">Задачи</h2>
+  <p class="sec-sub">Для каких задач ты используешь AI? Отметь всё, что подходит.</p>
+
+  <div class="card">
+    <div class="phase-lbl">
+      <svg width="14" height="14" viewBox="0 0 14 14"><rect x="1" y="1" width="12" height="3" rx="1" fill="currentColor"/><rect x="1" y="6" width="9" height="2" rx="1" fill="currentColor"/><rect x="1" y="10" width="11" height="2" rx="1" fill="currentColor"/></svg>
+      Планирование
+    </div>
+    <div class="cbgrid">
+      <div class="cbi" onclick="toggleCb(this)"><div class="cbbox"></div><div><div class="cb-text">PRDs</div></div></div>
+      <div class="cbi" onclick="toggleCb(this)"><div class="cbbox"></div><div><div class="cb-text">Estimation</div></div></div>
+      <div class="cbi" onclick="toggleCb(this)"><div class="cbbox"></div><div><div class="cb-text">Breakdown задач</div></div></div>
+      <div class="cbi" onclick="toggleCb(this)"><div class="cbbox"></div><div><div class="cb-text">Ресёрч</div></div></div>
+      <div class="cbi" onclick="toggleCb(this)"><div class="cbbox"></div><div><div class="cb-text">Мозгоштурм</div></div></div>
+    </div>
+
+    <div class="phase-lbl">
+      <svg width="14" height="14" viewBox="0 0 14 14"><rect x="5" y="0" width="4" height="4" rx="1" fill="currentColor"/><rect x="0" y="5" width="4" height="4" rx="1" fill="currentColor"/><rect x="10" y="5" width="4" height="4" rx="1" fill="currentColor"/><rect x="5" y="10" width="4" height="4" rx="1" fill="currentColor"/><rect x="6" y="3" width="2" height="8" fill="currentColor"/><rect x="3" y="6" width="8" height="2" fill="currentColor"/></svg>
+      Реализация
+    </div>
+    <div class="cbgrid">
+      <div class="cbi" onclick="toggleCb(this)"><div class="cbbox"></div><div><div class="cb-text">Code generation</div></div></div>
+      <div class="cbi" onclick="toggleCb(this)"><div class="cbbox"></div><div><div class="cb-text">Debugging</div></div></div>
+      <div class="cbi" onclick="toggleCb(this)"><div class="cbbox"></div><div><div class="cb-text">Refactoring</div></div></div>
+      <div class="cbi" onclick="toggleCb(this)"><div class="cbbox"></div><div><div class="cb-text">Code review</div></div></div>
+    </div>
+
+    <div class="phase-lbl">
+      <svg width="14" height="14" viewBox="0 0 14 14"><rect x="3" y="0" width="8" height="8" rx="1" fill="currentColor"/><rect x="5" y="2" width="4" height="4" rx="1" fill="white"/><rect x="5" y="9" width="4" height="5" rx="1" fill="currentColor"/></svg>
+      Тестирование
+    </div>
+    <div class="cbgrid">
+      <div class="cbi" onclick="toggleCb(this)"><div class="cbbox"></div><div><div class="cb-text">Генерация тестов</div></div></div>
+      <div class="cbi" onclick="toggleCb(this)"><div class="cbbox"></div><div><div class="cb-text">QA / тест-кейсы</div></div></div>
+    </div>
+
+    <div class="phase-lbl">
+      <svg width="14" height="14" viewBox="0 0 14 14"><rect x="0" y="2" width="14" height="10" rx="2" fill="currentColor"/><rect x="2" y="0" width="10" height="3" rx="1" fill="currentColor"/><rect x="2" y="5" width="10" height="2" rx="1" fill="white"/><rect x="2" y="9" width="6" height="2" rx="1" fill="white"/></svg>
+      За пределами кода
+    </div>
+    <div class="cbgrid">
+      <div class="cbi" onclick="toggleCb(this)"><div class="cbbox"></div><div><div class="cb-text">Документация</div></div></div>
+      <div class="cbi" onclick="toggleCb(this)"><div class="cbbox"></div><div><div class="cb-text">Переводы</div></div></div>
+      <div class="cbi" onclick="toggleCb(this)"><div class="cbbox"></div><div><div class="cb-text">Коммуникации / email</div></div></div>
+      <div class="cbi" onclick="toggleCb(this)"><div class="cbbox"></div><div><div class="cb-text">Найм</div></div></div>
+      <div class="cbi" onclick="toggleCb(this)"><div class="cbbox"></div><div><div class="cb-text">Дизайн</div></div></div>
+      <div class="cbi" onclick="toggleCb(this)"><div class="cbbox"></div><div><div class="cb-text">Анализ данных</div></div></div>
+      <div class="cbi" onclick="toggleCb(this)"><div class="cbbox"></div><div><div class="cb-text">Обучение</div></div></div>
+      <div class="cbi" onclick="toggleCb(this)"><div class="cbbox"></div><div><div class="cb-text">Автоматизации / ops</div></div></div>
+    </div>
+
+    <div style="margin-top:14px">
+      <div class="qlbl">Что-то ещё?</div>
+      <input type="text" id="task-other" placeholder="Своими словами…" style="margin-top:6px">
+    </div>
+  </div>
+</div>
+
+<!-- ── SECTION 3: DEPTH ─────────────────────── -->
+<div class="section-block" id="sec-depth">
+  <div class="sec-head">
+    <!-- pixel star/spark icon -->
+    <svg class="sec-icon" width="20" height="20" viewBox="0 0 20 20">
+      <rect x="9" y="0" width="2" height="6" rx="1" fill="currentColor"/>
+      <rect x="9" y="14" width="2" height="6" rx="1" fill="currentColor"/>
+      <rect x="0" y="9" width="6" height="2" rx="1" fill="currentColor"/>
+      <rect x="14" y="9" width="6" height="2" rx="1" fill="currentColor"/>
+      <rect x="2" y="2" width="2" height="2" fill="currentColor"/>
+      <rect x="16" y="2" width="2" height="2" fill="currentColor"/>
+      <rect x="2" y="16" width="2" height="2" fill="currentColor"/>
+      <rect x="16" y="16" width="2" height="2" fill="currentColor"/>
+      <rect x="7" y="7" width="6" height="6" rx="2" fill="currentColor"/>
+    </svg>
+    <span class="sec-tag">Раздел 3</span>
+  </div>
+  <h2 class="sec-title">Глубина практики</h2>
+  <p class="sec-sub">Хотим понять, как ты работаешь с AI — и собрать лучшие практики для команды.</p>
+
+  <div class="card">
+    <div class="qlbl">Есть ли у тебя промпты или инструкции, которые используешь регулярно?</div>
+    <div class="qsub">Скиллы, системные промпты, шаблоны — всё, что запускаешь повторно.</div>
+    <div class="toggles">
+      <div class="tbtn" id="prompts-yes" onclick="togglePrompts(true)">Да</div>
+      <div class="tbtn" id="prompts-no" onclick="togglePrompts(false)">Нет</div>
+    </div>
+    <div class="expand-body" id="prompts-expand">
+      <div class="qlbl">Приложи или опиши один-два из своего топа</div>
+      <div class="qsub">Что за задача, как устроен промпт, какой инструмент — в любом формате.</div>
+      <textarea id="inp-prompts" rows="3" placeholder="Например: «Системный промпт для code review в Cursor — просит объяснять каждое изменение и указывать на edge cases»"></textarea>
+      <div class="input-row">
+        <button class="btn-mic" onclick="toggleVoice(this,'inp-prompts')">
+          <svg width="12" height="12" viewBox="0 0 12 12"><rect x="4" y="0" width="4" height="7" rx="2" fill="currentColor"/><rect x="1" y="4" width="10" height="2" rx="1" fill="currentColor" opacity=".4"/><path d="M2 6 Q2 10 6 10 Q10 10 10 6" stroke="currentColor" stroke-width="1.5" fill="none"/><rect x="5" y="10" width="2" height="2" fill="currentColor"/></svg>
+          Голос
+        </button>
+        <div class="dropzone" onclick="this.querySelector('input').click()" style="flex:1;margin-top:0;padding:8px 12px">
+          <input type="file" style="display:none" accept="image/*,.txt,.md">
+          <p style="font-size:11px">Скриншот или файл — <strong>выбери</strong></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ── SECTION 4: CASES ─────────────────────── -->
+<div class="section-block" id="sec-cases">
+  <div class="sec-head">
+    <!-- pixel speech bubble -->
+    <svg class="sec-icon" width="20" height="20" viewBox="0 0 20 20">
+      <rect x="0" y="0" width="18" height="13" rx="3" fill="currentColor"/>
+      <rect x="2" y="14" width="5" height="3" rx="1" fill="currentColor"/>
+      <rect x="3" y="4" width="12" height="2" rx="1" fill="white"/>
+      <rect x="3" y="8" width="8" height="2" rx="1" fill="white"/>
+    </svg>
+    <span class="sec-tag">Раздел 4</span>
+  </div>
+  <h2 class="sec-title">Кейсы</h2>
+  <p class="sec-sub">Расскажи про момент, когда AI реально помог.</p>
+
+  <div class="card">
+    <div class="qlbl">Классный кейс с работы</div>
+    <textarea id="inp-case" rows="4" placeholder="Что произошло, какой инструмент, почему это сработало — или почему удивило."></textarea>
+    <div class="input-row">
+      <button class="btn-mic" onclick="toggleVoice(this,'inp-case')">
+        <svg width="12" height="12" viewBox="0 0 12 12"><rect x="4" y="0" width="4" height="7" rx="2" fill="currentColor"/><path d="M2 6 Q2 10 6 10 Q10 10 10 6" stroke="currentColor" stroke-width="1.5" fill="none"/><rect x="5" y="10" width="2" height="2" fill="currentColor"/></svg>
+        Голос
+      </button>
+      <div class="dropzone" onclick="this.querySelector('input').click()" style="flex:1;margin-top:0;padding:8px 12px">
+        <input type="file" style="display:none" accept="image/*,.pdf">
+        <p style="font-size:11px">Скриншот — <strong>выбери или перетащи</strong></p>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+    <div class="qlbl">Хочешь поделиться кейсом с командой?</div>
+    <div class="toggles" id="share-toggles">
+      <div class="tbtn" onclick="pickShare(this,'yes')">Да</div>
+      <div class="tbtn" onclick="pickShare(this,'anon')">Анонимно</div>
+      <div class="tbtn" onclick="pickShare(this,'dont-mind')">Не против</div>
+      <div class="tbtn" onclick="pickShare(this,'no')">Нет</div>
+    </div>
+    <input type="hidden" id="share-val" value="">
+
+    <div class="expand-body" id="personal-expand">
+      <div class="divider"></div>
+      <span class="expand-toggle" onclick="toggleExpand('personal-body',this)">
+        <span class="arr">▸</span> Был классный кейс вне работы?
+      </span>
+      <div class="expand-body" id="personal-body">
+        <div class="qsub" style="margin-top:8px">Необязательно что-то масштабное — мелкие приколдесы тоже считаются.</div>
+        <textarea id="inp-personal" rows="3" placeholder="Что угодно, что хочется рассказать…"></textarea>
+        <div class="input-row">
+          <button class="btn-mic" onclick="toggleVoice(this,'inp-personal')">
+            <svg width="12" height="12" viewBox="0 0 12 12"><rect x="4" y="0" width="4" height="7" rx="2" fill="currentColor"/><path d="M2 6 Q2 10 6 10 Q10 10 10 6" stroke="currentColor" stroke-width="1.5" fill="none"/><rect x="5" y="10" width="2" height="2" fill="currentColor"/></svg>
+            Голос
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── SECTION 5: BLOCKERS ──────────────────── -->
+<div class="section-block" id="sec-blockers">
+  <div class="sec-head">
+    <!-- pixel shield icon -->
+    <svg class="sec-icon" width="20" height="20" viewBox="0 0 20 20">
+      <rect x="2" y="0" width="16" height="12" rx="2" fill="currentColor"/>
+      <rect x="4" y="12" width="12" height="4" rx="1" fill="currentColor"/>
+      <rect x="7" y="16" width="6" height="3" rx="1" fill="currentColor"/>
+      <rect x="9" y="3" width="2" height="6" rx="1" fill="white"/>
+      <rect x="9" y="10" width="2" height="2" rx="1" fill="white"/>
+    </svg>
+    <span class="sec-tag">Раздел 5</span>
+  </div>
+  <h2 class="sec-title">Ограничения и запросы</h2>
+  <p class="sec-sub">Честная часть. Что не работает и что хочется.</p>
+
+  <div class="card">
+    <div class="qlbl">Где AI тебя подводил или разочаровал?</div>
+    <textarea id="inp-pain" rows="3" placeholder="Галлюцинации, потеря контекста, слишком дорого, нельзя использовать из-за политик…"></textarea>
+    <div class="input-row">
+      <button class="btn-mic" onclick="toggleVoice(this,'inp-pain')">
+        <svg width="12" height="12" viewBox="0 0 12 12"><rect x="4" y="0" width="4" height="7" rx="2" fill="currentColor"/><path d="M2 6 Q2 10 6 10 Q10 10 10 6" stroke="currentColor" stroke-width="1.5" fill="none"/><rect x="5" y="10" width="2" height="2" fill="currentColor"/></svg>
+        Голос
+      </button>
+    </div>
+
+    <div class="divider"></div>
+    <div class="qlbl">Как часто упираешься в ограничения?</div>
+    <div class="qsub">1 — почти никогда, 5 — постоянно мешает</div>
+    <div class="scale" id="friction-scale">
+      <div class="sopt" onclick="pickScale('friction-scale',this)">1</div>
+      <div class="sopt" onclick="pickScale('friction-scale',this)">2</div>
+      <div class="sopt" onclick="pickScale('friction-scale',this)">3</div>
+      <div class="sopt" onclick="pickScale('friction-scale',this)">4</div>
+      <div class="sopt" onclick="pickScale('friction-scale',this)">5</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="qlbl">Что мешает более широкому использованию AI в вашей команде?</div>
+    <div class="qsub">Всё что подходит</div>
+
+    <div class="phase-lbl" style="margin-top:0">Технические</div>
+    <div class="cbgrid single">
+      <div class="cbi" onclick="toggleCb(this)"><div class="cbbox"></div><div class="cb-text">Нет доступа к нужному инструменту</div></div>
+      <div class="cbi" onclick="toggleCb(this)"><div class="cbbox"></div><div class="cb-text">Слишком дорого / нет бюджета</div></div>
+      <div class="cbi" onclick="toggleCb(this)"><div class="cbbox"></div><div class="cb-text">Ограничения безопасности / политики компании</div></div>
+      <div class="cbi" onclick="toggleCb(this)"><div class="cbbox"></div><div class="cb-text">Технические ограничения среды (сеть, VPN, устройства)</div></div>
+      <div class="cbi" onclick="toggleCb(this)"><div class="cbbox"></div><div class="cb-text">Нет интеграции с нашим стеком</div></div>
+    </div>
+
+    <div class="phase-lbl">Человеческие</div>
+    <div class="cbgrid single">
+      <div class="cbi" onclick="toggleCb(this)"><div class="cbbox"></div><div class="cb-text">Не хватает навыков — не знаю, с чего начать</div></div>
+      <div class="cbi" onclick="toggleCb(this)"><div class="cbbox"></div><div class="cb-text">Нет времени разобраться</div></div>
+      <div class="cbi" onclick="toggleCb(this)"><div class="cbbox"></div><div class="cb-text">Нужен живой гайданс — кто-то из команды, кто покажет</div></div>
+      <div class="cbi" onclick="toggleCb(this)"><div class="cbbox"></div><div class="cb-text">Нет понимания, что конкретно можно делегировать AI</div></div>
+      <div class="cbi" onclick="toggleCb(this)"><div class="cbbox"></div><div class="cb-text">Скептицизм или сопротивление в команде</div></div>
+    </div>
+
+    <div style="margin-top:10px">
+      <input type="text" id="blocker-other" placeholder="Другое…">
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="qlbl">Есть задачи, где ты чувствуешь, что AI мог бы помочь — но не уверен как? Или хотел бы, чтобы кто-то показал?</div>
+    <div class="toggles">
+      <div class="tbtn" id="guidance-yes" onclick="toggleGuidance(true)">Да</div>
+      <div class="tbtn" id="guidance-no" onclick="toggleGuidance(false)">Нет</div>
+    </div>
+    <div class="expand-body" id="guidance-expand">
+      <div class="qlbl" style="margin-top:4px">Я хотел бы разобраться в / получить МК по…</div>
+      <textarea id="inp-guidance" rows="3" placeholder="Конкретная задача, сценарий или тема…"></textarea>
+      <div class="input-row">
+        <button class="btn-mic" onclick="toggleVoice(this,'inp-guidance')">
+          <svg width="12" height="12" viewBox="0 0 12 12"><rect x="4" y="0" width="4" height="7" rx="2" fill="currentColor"/><path d="M2 6 Q2 10 6 10 Q10 10 10 6" stroke="currentColor" stroke-width="1.5" fill="none"/><rect x="5" y="10" width="2" height="2" fill="currentColor"/></svg>
+          Голос
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── FINAL ─────────────────────────────────── -->
+<div class="section-block" id="sec-final">
+
+  <!-- Meta / dark section — BEFORE results -->
+  <div class="final-block">
+    <div class="meta-lbl">Последний вопрос</div>
+    <h2 class="meta-h">Ты только что прошёл опросник об AI.<br>Он сделан с помощью AI.</h2>
+    <p class="meta-sub">Если бы тебе нужно было сделать такой опросник — расскажи, какими шагами и каким стеком ты бы это делал.</p>
+    <textarea id="inp-meta" rows="5" placeholder=""></textarea>
+    <div class="input-row">
+      <button class="btn-mic" onclick="toggleVoice(this,'inp-meta')" style="color:rgba(255,255,255,.45);border-color:rgba(255,255,255,.15);background:transparent">
+        <svg width="12" height="12" viewBox="0 0 12 12"><rect x="4" y="0" width="4" height="7" rx="2" fill="currentColor"/><path d="M2 6 Q2 10 6 10 Q10 10 10 6" stroke="currentColor" stroke-width="1.5" fill="none"/><rect x="5" y="10" width="2" height="2" fill="currentColor"/></svg>
+        Голос
+      </button>
+    </div>
+
+    <div class="who-sec">
+      <div class="who-lbl">Кстати, а как ты заполнял(а) эту анкету?</div>
+      <div class="who-opts">
+        <div class="wopt" onclick="pickWho(this,'self')">
+          <div class="wradio"></div>
+          <span class="wtxt">Сам(а) — без AI</span>
+        </div>
+        <div class="wopt" onclick="pickWho(this,'ai-help-write')">
+          <div class="wradio"></div>
+          <span class="wtxt">Сам(а), но спрашивал(а) AI как сформулировать</span>
+        </div>
+        <div class="wopt" onclick="pickWho(this,'ai-cases')">
+          <div class="wradio"></div>
+          <span class="wtxt">Спрашивал(а) у агента про кейсы и инструменты</span>
+        </div>
+        <div class="wopt" onclick="pickWho(this,'ai-filled-checked')">
+          <div class="wradio"></div>
+          <span class="wtxt">Дал(а) задачу заполнить — проверил(а) и поправил(а)</span>
+        </div>
+        <div class="wopt" onclick="pickWho(this,'agent')">
+          <div class="wradio"></div>
+          <span class="wtxt">Я агент — меня попросили пройти и отправить опрос</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Open comments -->
+  <div class="card" style="margin-top:0">
+    <div class="qlbl">Комментарии — про что мы забыли спросить?</div>
+    <div class="qsub">Необязательно. Что угодно, что хотелось сказать, но не было места.</div>
+    <textarea id="inp-comments" rows="3" placeholder="Мысли, идеи, вопросы в ответ…"></textarea>
+    <div class="input-row">
+      <button class="btn-mic" onclick="toggleVoice(this,'inp-comments')">
+        <svg width="12" height="12" viewBox="0 0 12 12"><rect x="4" y="0" width="4" height="7" rx="2" fill="currentColor"/><path d="M2 6 Q2 10 6 10 Q10 10 10 6" stroke="currentColor" stroke-width="1.5" fill="none"/><rect x="5" y="10" width="2" height="2" fill="currentColor"/></svg>
+        Голос
+      </button>
+    </div>
+  </div>
+
+  <!-- Name -->
+  <div class="name-card" style="margin-top:0">
+    <div class="name-lbl">Твоё имя *</div>
+    <input type="text" id="inp-name" placeholder="Имя Фамилия">
+  </div>
+
+  <!-- Submit -->
+  <div style="display:flex;justify-content:flex-end;margin-bottom:28px">
+    <button class="btn-submit" onclick="submitSurvey()">Отправить →</button>
+  </div>
+
+  <!-- Summary — revealed after submit -->
+  <div class="summary-card" id="summary-card" style="opacity:0;transition:opacity .6s ease">
+    <div class="summary-greeting">Спасибо, <span id="sum-name"></span>!</div>
+    <div id="summary-sections"></div>
+  </div>
+
+</div>
+
+</div><!-- /wrap -->
+
+<!-- ── VALIDATION MODAL ───────────────────────── -->
+<div class="vmodal-overlay" id="vmodal-overlay">
+  <div class="vmodal">
+    <div class="vmodal-title">Не все вопросы заполнены</div>
+    <div class="vmodal-sub">Пропущено кое-что важное. Можно вернуться и дополнить — или отправить как есть.</div>
+    <ul class="vmodal-list" id="vmodal-list"></ul>
+    <div class="vmodal-btns">
+      <button class="vmodal-force" onclick="forceSubmit()">Всё равно отправить</button>
+      <button class="vmodal-back" onclick="closeModal()">Вернуться и дополнить</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ SCRIPT ════════════════════════════════════ -->
+<script>
+/* ── Tool data ── */
+const TOOL_ICONS = {
+  'ChatGPT':            'chatgpt.com',
+  'Claude':             'claude.ai',
+  'Claude Code':        'claude.ai',
+  'Gemini':             'gemini.google.com',
+  'DeepSeek':           'deepseek.com',
+  'Grok':               'x.ai',
+  'Microsoft Copilot':  'copilot.microsoft.com',
+  'GitHub Copilot':     'github.com',
+  'Cursor':             'cursor.com',
+  'Codeium / Windsurf': 'codeium.com',
+  'Perplexity':         'perplexity.ai',
+  'NotebookLM':         'notebooklm.google.com',
+  'ElevenLabs':         'elevenlabs.io',
+  'Whisper':            'openai.com',
+  'Midjourney':         'midjourney.com',
+  'Bolt':               'bolt.new',
+  'Replit':             'replit.com',
+  'Lovable':            'lovable.dev',
+  'Sora':               'sora.com',
+  'Kling':              'klingai.com',
+};
+
+const TOOLS = [
+  'ChatGPT','Claude','Claude Code','Gemini','DeepSeek','Grok',
+  'Microsoft Copilot','GitHub Copilot','Cursor',
+  'Perplexity','NotebookLM','ElevenLabs','Whisper',
+  'Midjourney','Bolt','Replit','Lovable','Sora','Kling'
+];
+const PAYMENT = ['Корп. подписка','Бесплатная версия','Плачу сам'];
+const FREQ    = ['Много раз в день','Несколько раз в неделю','Раз в неделю и реже'];
+const ACCESS  = ['Веб','Приложение','Десктоп-клиент','Терминал / CLI','API','IDE-интеграция'];
+
+/* ── Tool row template ── */
+function toolRowHtml(id, name){
+  const trySubId = `${id}-try`;
+  const iconDomain = TOOL_ICONS[name];
+  const iconHtml = iconDomain
+    ? `<img src="https://www.google.com/s2/favicons?domain=${iconDomain}&sz=32" style="width:16px;height:16px;border-radius:3px;vertical-align:middle;margin-right:7px;flex-shrink:0">`
+    : '';
+  return `
+    <div class="tool-top">
+      <span class="tool-nm">${iconHtml}${name}</span>
+      <div class="radio-group">
+        <div class="ropt" data-tool="${id}" data-status="use" onclick="pickToolStatus(this)">Использую</div>
+        <div class="ropt r-dropped" data-tool="${id}" data-status="dropped" onclick="pickToolStatus(this)">Пробовал(а), не прижилось</div>
+        <div class="ropt" data-tool="${id}" data-status="no" onclick="pickToolStatus(this)">Не использую</div>
+        <div class="ropt r-try" data-tool="${id}" data-status="try" onclick="pickToolStatus(this)">Хочу попробовать</div>
+      </div>
+    </div>
+    <div class="tool-sub" id="${id}-sub">
+      <div class="sub-q">Способ оплаты</div>
+      <div class="mini-radio">${PAYMENT.map(p=>`<div class="mr" onclick="pickMiniRadio(this)">${p}</div>`).join('')}</div>
+      <div class="sub-q">Частота использования</div>
+      <div class="mini-radio">${FREQ.map(f=>`<div class="mr" onclick="pickMiniRadio(this)">${f}</div>`).join('')}</div>
+      <div class="sub-q">Как подключаешься</div>
+      <div class="mini-cb">${ACCESS.map(a=>`<div class="mc" onclick="toggleMiniCb(this)">${a}</div>`).join('')}</div>
+    </div>
+    <div class="try-sub" id="${trySubId}">
+      <div class="sub-q" style="margin-top:0">Блокеры, вопросы или планы <span style="color:var(--muted);font-weight:400;text-transform:none;letter-spacing:0">(опционально)</span></div>
+      <textarea rows="2" placeholder="Что мешает, для чего хочешь использовать, или любые вопросы…" style="font-size:12px;padding:8px 10px;margin-top:4px"></textarea>
+    </div>
+    <div class="dropped-field" id="${id}-dropped">
+      <input type="text" placeholder="Что пошло не так? (опционально)" style="margin-top:6px">
+    </div>
+  `;
+}
+
+/* ── Build tool list ── */
+function buildTools(){
+  const container = document.getElementById('tools-list');
+  TOOLS.forEach((name, idx) => {
+    const id = 'tool-'+idx;
+    const row = document.createElement('div');
+    row.className = 'tool-row';
+    row.innerHTML = toolRowHtml(id, name);
+    container.appendChild(row);
+  });
+}
+
+function pickToolStatus(chip){
+  const toolId = chip.dataset.tool;
+  const status = chip.dataset.status;
+  chip.closest('.radio-group').querySelectorAll('.ropt').forEach(c=>c.classList.remove('on'));
+  chip.classList.add('on');
+  document.getElementById(toolId+'-sub').classList.toggle('open', status==='use');
+  document.getElementById(toolId+'-dropped').classList.toggle('open', status==='dropped');
+  const trySub = document.getElementById(toolId+'-try');
+  if(trySub) trySub.classList.toggle('open', status==='try');
+}
+
+function pickMiniRadio(el){
+  el.closest('.mini-radio').querySelectorAll('.mr').forEach(m=>m.classList.remove('on'));
+  el.classList.add('on');
+}
+function toggleMiniCb(el){ el.classList.toggle('on'); }
+
+function addTool(){
+  const inp = document.getElementById('tool-other-inp');
+  const val = inp.value.trim();
+  if(!val) return;
+  const idx = 'custom-'+Date.now();
+  const row = document.createElement('div');
+  row.className = 'tool-row';
+  row.innerHTML = toolRowHtml(idx, val);
+  document.getElementById('colleague-list').appendChild(row);
+  document.getElementById('colleague-section').classList.add('open');
+  inp.value = '';
+}
+
+/* ── Helpers ── */
+function toggleCb(el){ el.classList.toggle('on'); }
+function pickScale(id, el){
+  document.getElementById(id).querySelectorAll('.sopt').forEach(o=>o.classList.remove('on'));
+  el.classList.add('on');
+}
+function pickShare(el, val){
+  document.getElementById('share-toggles').querySelectorAll('.tbtn').forEach(b=>b.classList.remove('on'));
+  el.classList.add('on');
+  document.getElementById('share-val').value = val;
+  document.getElementById('personal-expand').classList.toggle('open', val==='yes'||val==='anon'||val==='dont-mind');
+}
+function toggleExpand(bodyId, toggle){
+  const body = document.getElementById(bodyId);
+  body.classList.toggle('open');
+  toggle.classList.toggle('open');
+}
+function togglePrompts(yes){
+  document.getElementById('prompts-yes').classList.toggle('on', yes);
+  document.getElementById('prompts-no').classList.toggle('on', !yes);
+  document.getElementById('prompts-expand').classList.toggle('open', yes);
+}
+function toggleGuidance(yes){
+  document.getElementById('guidance-yes').classList.toggle('on', yes);
+  document.getElementById('guidance-no').classList.toggle('on', !yes);
+  document.getElementById('guidance-expand').classList.toggle('open', yes);
+}
+function pickWho(el, val){
+  document.querySelectorAll('.wopt').forEach(w=>w.classList.remove('on'));
+  el.classList.add('on');
+}
+
+/* ── Voice ── */
+function toggleVoice(btn, targetId){
+  if(!('webkitSpeechRecognition' in window||'SpeechRecognition' in window)){
+    alert('Голосовой ввод доступен в Chrome.');
+    return;
+  }
+  const SR = window.SpeechRecognition||window.webkitSpeechRecognition;
+  if(btn._rec){ btn._rec.stop(); return; }
+  const rec = new SR();
+  rec.lang='ru-RU'; rec.continuous=true; rec.interimResults=true;
+  rec.onresult = e => {
+    document.getElementById(targetId).value = Array.from(e.results).map(r=>r[0].transcript).join('');
+  };
+  rec.onend = ()=>{ btn.classList.remove('rec'); btn.innerHTML=btn.innerHTML.replace('Стоп','Голос'); btn._rec=null; };
+  rec.start();
+  btn._rec=rec;
+  btn.classList.add('rec');
+  btn.innerHTML=btn.innerHTML.replace('Голос','Стоп');
+}
+
+/* ── Dino progress via IntersectionObserver ── */
+const SECTIONS = ['sec-tools','sec-tasks','sec-depth','sec-cases','sec-blockers','sec-final'];
+const DINO_POS  = ['3%','16%','30%','45%','60%','75%','91%'];
+const CACTUS    = ['ca0','ca1','ca2','ca3','ca4'];
+const SEC_LBLS  = ['sl0','sl1','sl2','sl3','sl4','sl5'];
+let currentSec  = 0;
+let runInterval = null;
+
+function setDinoPos(secIdx){
+  if(secIdx === currentSec) return;
+  currentSec = secIdx;
+  const dino = document.getElementById('dino');
+  dino.style.left = DINO_POS[secIdx];
+  dino.classList.remove('jump');
+  void dino.offsetWidth;
+  dino.classList.add('jump');
+  // Cactus states
+  CACTUS.forEach((id,i)=>{
+    document.getElementById(id).classList.toggle('passed', secIdx > i+1);
+  });
+  // Labels
+  SEC_LBLS.forEach((id,i)=>{
+    const el = document.getElementById(id);
+    const s = i+1;
+    el.className = 'sec-lbl'+(secIdx>s?' done':secIdx===s?' active':'');
+  });
+  // Running legs
+  if(runInterval) clearInterval(runInterval);
+  let frame=false;
+  runInterval = setInterval(()=>{
+    frame=!frame;
+    dino.classList.toggle('ra',frame);
+    dino.classList.toggle('rb',!frame);
+  },200);
+}
+
+const observer = new IntersectionObserver(entries=>{
+  entries.forEach(entry=>{
+    if(entry.isIntersecting){
+      const idx = SECTIONS.indexOf(entry.target.id);
+      if(idx>=0) setDinoPos(idx+1);
+    }
+  });
+},{threshold:0.15});
+
+SECTIONS.forEach(id=>{
+  const el = document.getElementById(id);
+  if(el) observer.observe(el);
+});
+
+/* ── Summary ── */
+function generateSummary(){
+  const name = document.getElementById('inp-name').value.trim();
+  document.getElementById('sum-name').textContent = name;
+
+  const parts = [];
+
+  // Tools
+  const toolsUsed = [...document.querySelectorAll('.ropt.on[data-status="use"]')]
+    .map(el => el.closest('.tool-row').querySelector('.tool-nm').textContent.trim());
+  if(toolsUsed.length === 1)
+    parts.push(`Из инструментов используешь ${toolsUsed[0]}.`);
+  else if(toolsUsed.length > 1)
+    parts.push(`Используешь ${toolsUsed.length} инструмента: ${toolsUsed.slice(0,3).join(', ')}${toolsUsed.length > 3 ? ` и ещё ${toolsUsed.length - 3}` : ''}.`);
+
+  // Tasks
+  const tasks = [...document.querySelectorAll('#sec-tasks .cbi.on .cb-text')]
+    .map(el => el.textContent.trim());
+  if(tasks.length)
+    parts.push(`Применяешь для: ${tasks.slice(0,4).join(', ')}${tasks.length > 4 ? '…' : '.'}`);
+
+  // Depth
+  const promptsYes = document.getElementById('prompts-yes').classList.contains('on');
+  const usesApi = document.querySelector('#sec-depth .cbgrid.single .cbi.on');
+  const depthBits = [];
+  if(promptsYes) depthBits.push('есть сохранённые промпты');
+  if(usesApi) depthBits.push('используешь API или интеграции');
+  if(depthBits.length) parts.push(`Из практик: ${depthBits.join(', ')}.`);
+
+  // Pain
+  const frictionEl = document.querySelector('#friction-scale .sopt.on');
+  const painText = document.getElementById('inp-pain').value.trim();
+  if(frictionEl && parseInt(frictionEl.textContent) >= 3){
+    const frictPhrase = {3:'периодически', 4:'часто', 5:'постоянно'}[frictionEl.textContent.trim()] || '';
+    parts.push(`Ограничения ${frictPhrase} мешают.` + (painText ? ` Основная боль: «${painText.slice(0,80)}${painText.length>80?'…':''}»` : ''));
+  } else if(painText){
+    parts.push(`Из болей: «${painText.slice(0,100)}${painText.length>100?'…':''}».`);
+  }
+
+  // Want to try
+  const toolsTry = [...document.querySelectorAll('.ropt.on[data-status="try"]')]
+    .map(el => el.closest('.tool-row').querySelector('.tool-nm').textContent.trim());
+  if(toolsTry.length)
+    parts.push(`Хочет попробовать: ${toolsTry.slice(0,3).join(', ')}${toolsTry.length > 3 ? ` (+${toolsTry.length-3})` : ''}.`);
+
+  const html = parts.length
+    ? `<div class="summary-val" style="line-height:1.9">${parts.join(' ')}</div>`
+    : `<div class="summary-val">Ответы сохранены.</div>`;
+
+  document.getElementById('summary-sections').innerHTML = html;
+
+  const card = document.getElementById('summary-card');
+  card.style.opacity = '1';
+  setTimeout(() => card.scrollIntoView({behavior:'smooth', block:'start'}), 100);
+}
+
+/* ── File drop ── */
+document.querySelectorAll('.dropzone').forEach(zone=>{
+  zone.addEventListener('dragover',e=>{e.preventDefault();zone.classList.add('over');});
+  zone.addEventListener('dragleave',()=>zone.classList.remove('over'));
+  zone.addEventListener('drop',e=>{
+    e.preventDefault();zone.classList.remove('over');
+    const f=e.dataTransfer.files[0];
+    if(f) zone.querySelector('p').innerHTML=`<strong>${f.name}</strong> прикреплён`;
+  });
+  const inp=zone.querySelector('input[type=file]');
+  if(inp) inp.addEventListener('change',e=>{
+    const f=e.target.files[0];
+    if(f) zone.querySelector('p').innerHTML=`<strong>${f.name}</strong> прикреплён`;
+  });
+});
+
+/* ── Validation ── */
+function getMissing(){
+  const missing = [];
+
+  // Section 1: at least one tool with a status
+  const anyTool = document.querySelector('.ropt.on');
+  if(!anyTool) missing.push('Раздел 1 — не отмечен ни один инструмент');
+
+  // Section 2: at least one task
+  const anyTask = document.querySelector('#sec-tasks .cbi.on');
+  if(!anyTask) missing.push('Раздел 2 — не выбрана ни одна задача');
+
+  // Section 3: prompts yes/no
+  const promptsAnswered = document.getElementById('prompts-yes').classList.contains('on')
+    || document.getElementById('prompts-no').classList.contains('on');
+  if(!promptsAnswered) missing.push('Раздел 3 — не ответил(а) про сохранённые промпты');
+
+  // Section 4: work case
+  if(!document.getElementById('inp-case').value.trim())
+    missing.push('Раздел 4 — не описан кейс с работы');
+
+  // Section 4: sharing preference
+  if(!document.getElementById('share-val').value)
+    missing.push('Раздел 4 — не выбран вариант «поделиться кейсом»');
+
+  // Section 5: friction scale
+  if(!document.querySelector('#friction-scale .sopt.on'))
+    missing.push('Раздел 5 — не выставлена шкала ограничений');
+
+  // Final: who filled
+  if(!document.querySelector('.wopt.on'))
+    missing.push('Финал — не выбрано, как заполнял(а) анкету');
+
+  // Final: name
+  if(!document.getElementById('inp-name').value.trim())
+    missing.push('Имя не заполнено');
+
+  return missing;
+}
+
+function doSubmit(){
+  generateSummary();
+  console.log('Survey submitted:', {name: document.getElementById('inp-name').value.trim(), ts: new Date().toISOString()});
+}
+
+function closeModal(){
+  document.getElementById('vmodal-overlay').classList.remove('open');
+}
+
+function forceSubmit(){
+  closeModal();
+  doSubmit();
+}
+
+/* ── Submit ── */
+function submitSurvey(){
+  const missing = getMissing();
+  if(missing.length === 0){
+    doSubmit();
+    return;
+  }
+  const list = document.getElementById('vmodal-list');
+  list.innerHTML = missing.map(m=>`<li>${m}</li>`).join('');
+  document.getElementById('vmodal-overlay').classList.add('open');
+}
+
+/* ── Modal close on overlay click ── */
+document.getElementById('vmodal-overlay').addEventListener('click', function(e){
+  if(e.target === this) closeModal();
+});
+
+/* ── Init ── */
+buildTools();
+// Archetype is revealed only on submit — not auto-generated on scroll
+</script>
+</body>
+</html>
